@@ -1,8 +1,19 @@
 (function() {
+  let speed = 3;
   let eleList = document.getElementById('bricks');
   let eleBoard = document.getElementsByClassName('board')[0];
   let eleBall = document.getElementsByClassName('ball')[0];
-  console.log(eleList);
+
+  let vh = window.innerHeight - eleBall.offsetHeight;
+  let vw = window.innerWidth - eleBall.offsetHeight;
+
+  let {
+    x: boardX,
+    y: boardY,
+    width: boardWidth,
+    right: boardRight
+  } = getCordinates(eleBoard);
+
   var d = document.createDocumentFragment();
 
   for (let i = 0; i < 50; i++) {
@@ -12,36 +23,38 @@
   }
   eleList.appendChild(d);
 
-  let pos = 0;
-
   function getCordinates(elem) {
-    const { x, y, width, height } = elem.getBoundingClientRect();
-    return { x, y, width, height };
+    const { x, y, width, height, right } = elem.getBoundingClientRect();
+    return { x, y, width, height, right };
   }
 
   function moveLeft(e) {
     console.log(e.code);
     if (e.code == 'ArrowLeft') {
-      // eleBoard.style.transform = "translateX('10px')";
-      // eleBoard.animate({ left: '10px' });
-      pos -= 10;
-      eleBoard.style.left = `${pos}px`;
+      if (boardX - 10 >= 0) boardX -= 10;
+      eleBoard.style.left = `${boardX}px`;
     }
   }
   function moveRight(e) {
-    console.log(e.code);
     if (e.code == 'ArrowRight') {
-      pos += 10;
-      eleBoard.style.left = `${pos}px`;
+      console.log(boardX, vw);
+      // if (boardX + boardWidth < vw) boardX += 10;
+      // if (boardX + boardWidth >= vw) {
+      //   boardX = vw - boardWidth;
+      // }
+
+      boardX += 10;
+      eleBoard.style.left = `${boardX}px`;
     }
+  }
+
+  function resetGame() {
+    console.log('game resetted');
   }
 
   let dir = [1, -1];
   let { x, y } = getCordinates(eleBall);
-  let vh = window.innerHeight - eleBall.offsetHeight;
-  let vw = window.innerWidth - eleBall.offsetHeight;
 
-  let { x: boardX, y: boardY, width: boardWidth } = getCordinates(eleBoard);
   let {
     x: brickX,
     y: brickY,
@@ -50,13 +63,13 @@
   } = getCordinates(eleList);
 
   let id = setInterval(() => {
-    x = x + dir[0] * 2;
-    y = y + dir[1] * 2;
+    x = x + dir[0] * speed;
+    y = y + dir[1] * speed;
 
-    if (x >= boardX && x <= boardX + boardWidth && y == boardY)
+    if (x >= boardX && x <= boardX + boardWidth && y >= boardY && y <= vh)
       dir = [dir[0], -1];
     if (x >= vw) dir = [-1, dir[1]];
-    if (x == 0) dir = [1, dir[1]];
+    if (x <= 0) dir = [1, dir[1]];
 
     if (
       x >= brickX &&
@@ -68,8 +81,8 @@
 
       if (pointEl && pointEl.classList.contains('brick')) {
         dir = [dir[0], 1];
-        console.log(pointEl);
-        pointEl.style.display = 'none';
+        pointEl.classList.remove('brick');
+        pointEl.classList.add('broken-brick');
       }
     }
   }, 16.7);
@@ -82,6 +95,6 @@
   }
 
   // renderFrame();
-  document.addEventListener('keyup', moveLeft);
-  document.addEventListener('keyup', moveRight);
+  document.addEventListener('keydown', moveLeft);
+  document.addEventListener('keydown', moveRight);
 })();
