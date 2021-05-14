@@ -37,7 +37,6 @@
   }
   function moveRight(e) {
     if (e.code == 'ArrowRight') {
-      console.log(boardX, vw);
       // if (boardX + boardWidth < vw) boardX += 10;
       // if (boardX + boardWidth >= vw) {
       //   boardX = vw - boardWidth;
@@ -50,6 +49,9 @@
 
   function resetGame() {
     console.log('game resetted');
+    eleBoard.style.left = 'calc(50% - 40px)';
+    x = 'calc(50% - 8px)';
+    y = null;
   }
 
   let dir = [1, -1];
@@ -66,6 +68,10 @@
     x = x + dir[0] * speed;
     y = y + dir[1] * speed;
 
+    if (y - eleBall.offsetHeight > vh) {
+      clearTimeout(id);
+      resetGame();
+    }
     if (x >= boardX && x <= boardX + boardWidth && y >= boardY && y <= vh)
       dir = [dir[0], -1];
     if (x >= vw) dir = [-1, dir[1]];
@@ -94,7 +100,7 @@
     requestAnimationFrame(renderFrame);
   }
 
-  // renderFrame();
+  renderFrame();
   document.addEventListener('keydown', moveLeft);
   document.addEventListener('keydown', moveRight);
 })();
