@@ -1,0 +1,36 @@
+body {
+  background: orange;
+  margin: 0px;
+  position: relative;
+}
+.brick {
+  width: 50px;
+  height: 20px;
+  border: 2px solid;
+}
+#bricks {
+  display: flex;
+  flex-wrap: wrap;
+}
+.board {
+  width: 80px;
+  height: 20px;
+  background: greenyellow;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 40px);
+}
+.ball {
+  border-radius: 50%;
+  background: red;
+  height: 16px;
+  width: 16px;
+  position: absolute;
+  left: calc(50% - 8px);
+  bottom: 20px;
+}
+.game {
+  /* position: relative; */
+  margin: auto;
+  width: fit-content;
+}
