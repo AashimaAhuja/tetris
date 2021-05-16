@@ -29,7 +29,6 @@
   }
 
   function moveLeft(e) {
-    console.log(e.code);
     if (e.code == 'ArrowLeft') {
       if (boardX - 10 >= 0) boardX -= 10;
       eleBoard.style.left = `${boardX}px`;
@@ -37,18 +36,12 @@
   }
   function moveRight(e) {
     if (e.code == 'ArrowRight') {
-      // if (boardX + boardWidth < vw) boardX += 10;
-      // if (boardX + boardWidth >= vw) {
-      //   boardX = vw - boardWidth;
-      // }
-
-      boardX += 10;
+      if (boardX + boardWidth < vw) boardX += 10;
       eleBoard.style.left = `${boardX}px`;
     }
   }
 
   function resetGame() {
-    console.log('game resetted');
     eleBoard.style.left = 'calc(50% - 40px)';
     x = 'calc(50% - 8px)';
     y = null;
@@ -72,7 +65,12 @@
       clearTimeout(id);
       resetGame();
     }
-    if (x >= boardX && x <= boardX + boardWidth && y >= boardY && y <= vh)
+    if (
+      x  >= boardX &&
+      x  <= boardX + boardWidth &&
+      y+eleBall.offsetHeight >= boardY &&
+      y <= vh
+    )
       dir = [dir[0], -1];
     if (x >= vw) dir = [-1, dir[1]];
     if (x <= 0) dir = [1, dir[1]];
